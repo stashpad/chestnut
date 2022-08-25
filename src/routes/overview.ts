@@ -38,3 +38,16 @@ overviewRouter.get("/", async (req, res) => {
     res.status(500).send("Error reading overview file")
   }
 })
+
+overviewRouter.get("/health", async (req, res) => {
+  // Get the latest version from the cache
+  const latest = await cache.loadCache()
+
+  if (!latest.platforms) {
+    res.status(404).send()
+    return
+  }
+
+  // send a 200 response if the release is found and cached
+  res.status(200).send()
+})
