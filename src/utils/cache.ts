@@ -118,6 +118,7 @@ export class Cache {
 
     if (this.latest.version === tag_name) {
       logger.info("Cached version is the same as the latest")
+      this.lastUpdate = Date.now()
       return
     }
 
@@ -154,8 +155,6 @@ export class Cache {
 
       // TODO: save to disk
     }
-
-    this.lastUpdate = Date.now()
   }
 
   isOutdated = () => {
@@ -176,10 +175,10 @@ export class Cache {
    * @returns Cache object
    */
   loadCache = async () => {
-    const { latest, refreshCache, isOutdated, lastUpdate } = this
+    const { latest, refreshCache, isOutdated } = this
 
-    if (!lastUpdate || isOutdated()) {
-      if (!lastUpdate) logger.info("No previous update available")
+    if (!this.lastUpdate || isOutdated()) {
+      if (!this.lastUpdate) logger.info("No previous update available")
       if (isOutdated()) logger.info("Passed refresh interval")
       await refreshCache()
     }
