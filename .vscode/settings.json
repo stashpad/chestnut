@@ -1,0 +1,14 @@
+{
+  "javascript.validate.enable": false,
+  "javascript.format.enable": false,
+  "javascript.suggest.autoImports": true,
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true
+  },
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
+}
