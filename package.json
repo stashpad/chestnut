@@ -10,7 +10,7 @@
   "scripts": {
     "build": "tsc",
     "start": "yarn build && NODE_ENV=development node dist/server.js",
-    "production": "yarn build && NODE_ENV=production node dist/server.js",
+    "production": "NODE_ENV=production node dist/server.js",
     "test": "jest"
   },
   "dependencies": {
