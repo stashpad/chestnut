@@ -59,6 +59,7 @@ export class Cache {
   }
 
   refreshCache = async () => {
+    logger.info("Checking GitHub for latest release...")
     const { account, repository, prerelease, token } = this.config
     const repo = account + "/" + repository
     const url = `https://api.github.com/repos/${repo}/releases?per_page=100`
@@ -158,10 +159,10 @@ export class Cache {
   }
 
   isOutdated = () => {
-    const { lastUpdate, config } = this
+    const { config } = this
     const { interval = 15 } = config
 
-    if (lastUpdate && Date.now() - lastUpdate > ms(`${interval}m`)) {
+    if (this.lastUpdate && Date.now() - this.lastUpdate > ms(`${interval}m`)) {
       return true
     }
 
@@ -178,6 +179,8 @@ export class Cache {
     const { latest, refreshCache, isOutdated, lastUpdate } = this
 
     if (!lastUpdate || isOutdated()) {
+      if (!lastUpdate) logger.info("No previous update available")
+      if (isOutdated()) logger.info("Passed refresh interval")
       await refreshCache()
     }
 
