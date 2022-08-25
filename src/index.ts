@@ -23,8 +23,9 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    console.log("res", res)
     console.error(err.stack)
-    res.status(500).send("Something broke!")
+    res
+      .status(500)
+      .send({ error: "internal_error", message: "Internal server error" })
   }
 )

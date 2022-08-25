@@ -1,7 +1,7 @@
 import express from "express"
 import { parse } from "express-useragent"
 import { parse as parseQuery } from "query-string"
-import cache from "../appCache"
+import cache from "../cache"
 import { checkAlias } from "../utils/aliases"
 import { proxyPrivateDownload } from "../utils/proxy"
 
@@ -16,7 +16,7 @@ downloadRouter.get("/", async (req, res) => {
   const params = parseQuery(req.query.toString())
   const isUpdate = params && params.update
 
-  let platform = "darwin"
+  let platform = ""
 
   if (userAgent.isMac && isUpdate) {
     platform = "darwin"
@@ -31,12 +31,15 @@ downloadRouter.get("/", async (req, res) => {
   const { platforms } = await cache.loadCache()
 
   if (!platform || !platforms || !platforms[platform]) {
-    res.status(404).send("No download available for your platform!")
+    res.status(404).send({
+      error: "no_file",
+      message: "No download available for your platform",
+    })
     return
   }
 
   if (shouldProxyPrivateDownload) {
-    proxyPrivateDownload(platforms[platform], req, res)
+    proxyPrivateDownload(platforms[platform], res, cache.config.token)
     return
   }
 
@@ -67,17 +70,23 @@ downloadRouter.get("/:platform", async (req, res) => {
   platform = checkAlias(platform)
 
   if (!platform) {
-    res.status(500).send("The specified platform is not valid")
+    res.status(400).send({
+      error: "invalid_platform",
+      message: "The specified platform is not valid",
+    })
     return
   }
 
   if (!latest.platforms || !latest.platforms[platform]) {
-    res.status(404).send("No download available for your platform")
+    res.status(404).send({
+      error: "no_file",
+      message: "No download available for your platform",
+    })
     return
   }
 
   if (token && typeof token === "string" && token.length > 0) {
-    proxyPrivateDownload(latest.platforms[platform], req, res)
+    proxyPrivateDownload(latest.platforms[platform], res, cache.config.token)
     return
   }
 

@@ -1,4 +1,4 @@
-const colorLogger = require("node-color-log")
+import colorLogger from "node-color-log"
 
 const messageTypes = {
   error: "[ERROR] ",
@@ -39,7 +39,7 @@ const warn = (message: string) => {
     .joint()
     .color("yellow")
     .bold()
-    .message(messageTypes.warn)
+    .log(messageTypes.warn)
     .joint()
     .log(message)
 }

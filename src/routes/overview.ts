@@ -1,6 +1,7 @@
 import { formatDistance, parseISO } from "date-fns"
 import express from "express"
-import cache from "../appCache"
+import cache from "../cache"
+import { logger } from "../utils/logger"
 import prepareView from "../utils/view"
 
 export const overviewRouter = express.Router()
@@ -34,7 +35,7 @@ overviewRouter.get("/", async (req, res) => {
 
     res.status(200).send(render(details))
   } catch (err) {
-    console.error(err)
+    logger.error(err)
     res.status(500).send("Error reading overview file")
   }
 })

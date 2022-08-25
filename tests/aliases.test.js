@@ -1,4 +1,4 @@
-const { checkAlias } = require("../src/utils/aliases")
+const { checkAlias } = require("../dist/utils/aliases")
 
 describe("aliases", () => {
   it("should accept platforms", () => {

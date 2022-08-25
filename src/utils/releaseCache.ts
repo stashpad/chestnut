@@ -1,8 +1,9 @@
 import retry from "async-retry"
 import ms from "ms"
 import fetch from "node-fetch"
+import { platformForFileName } from "./aliases"
 import { logger } from "./logger"
-import { platformForFileName } from "./platform"
+import { clearFilesFromDisk, downloadFileToDisk, toMB } from "./proxy"
 
 export interface IConfig {
   account: string
@@ -17,10 +18,44 @@ export interface ILatest {
   notes?: string
   version?: string
   platforms?: Record<string, any>
-  files?: Record<string, any>
+  files?: Record<string, IFileMetadata>
+  fullyDownloaded?: boolean
 }
 
-export class Cache {
+export interface IGithubAsset {
+  name: string
+  browser_download_url: string
+  url: string
+  content_type: string
+  /**
+   * in KB
+   */
+  size: number
+}
+
+export interface IGitHubRelease {
+  assets: IGithubAsset[]
+  tag_name: string
+  /**
+   * Release notes
+   */
+  body: string
+  published_at: string
+}
+
+export interface IFileMetadata {
+  name: string
+  api_url: string
+  url: string
+  content_type: string
+  /**
+   * in MB
+   */
+  size: number
+  cached?: boolean
+}
+
+export class ReleaseCache {
   public config: IConfig
   private latest: ILatest
   private lastUpdate: number //timestamp in ms
@@ -51,6 +86,9 @@ export class Cache {
 
     this.latest = {}
     this.lastUpdate = null
+
+    // try to populate cache at startup
+    this.loadCache()
   }
 
   shouldProxyPrivateDownload = () => {
@@ -108,7 +146,7 @@ export class Cache {
       if (isPrerelease && !wantPreReleases) return false
       return true
     }
-    const release = data.find(isReleaseValid)
+    const release: IGitHubRelease = data.find(isReleaseValid)
 
     if (!release || !release.assets || !Array.isArray(release.assets)) {
       return
@@ -117,33 +155,44 @@ export class Cache {
     const { tag_name } = release
 
     if (this.latest.version === tag_name) {
-      logger.info("Cached version is the same as the latest")
+      logger.info(
+        `No updates - cached version ${this.latest.version} is the latest`
+      )
       this.lastUpdate = Date.now()
       return
     }
 
-    logger.info(`Caching version ${tag_name}...`)
+    // Clear list of download links
+    this.latest.platforms = {}
+    this.latest.files = {}
+    this.latest.fullyDownloaded = false
+    clearFilesFromDisk()
+    logger.info("Clearing cached data")
+
+    logger.info(`Caching version ${tag_name}`)
 
     this.latest.version = tag_name
     this.latest.notes = release.body
     this.latest.pub_date = release.published_at
 
-    // Clear list of download links
-    this.latest.platforms = {}
-    this.latest.files = {}
-
-    for (const asset of release.assets) {
+    const downloadPromises: Promise<any>[] = []
+    for (const asset of release.assets as IGithubAsset[]) {
       const { name, browser_download_url, url, content_type, size } = asset
 
-      const metadata = {
+      const metadata: IFileMetadata = {
         name,
         api_url: url,
         url: browser_download_url,
         content_type,
-        // TODO extract to utility function
-        size: Math.round((size / 1000000) * 10) / 10,
+        size: toMB(size),
       }
 
+      const downloadProm = downloadFileToDisk(metadata, this.config.token)
+      downloadProm.then(() => {
+        metadata.cached = true
+        logger.info(`${name} is cached`)
+      })
+      downloadPromises.push(downloadProm)
       this.latest.files[name] = metadata
 
       const platform = platformForFileName(name)
@@ -152,14 +201,19 @@ export class Cache {
       }
 
       this.latest.platforms[platform] = metadata
-
-      // TODO: save to disk
     }
+
+    Promise.all(downloadPromises).then(() => {
+      this.latest.fullyDownloaded = true
+      logger.info(`✅ Finished downloading ${downloadPromises.length} files`)
+    })
+
+    this.lastUpdate = Date.now()
   }
 
   isOutdated = () => {
     const { config } = this
-    const { interval = 15 } = config
+    const { interval = 10 } = config
 
     if (this.lastUpdate && Date.now() - this.lastUpdate > ms(`${interval}m`)) {
       return true

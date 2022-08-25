@@ -1,6 +1,6 @@
 import express from "express"
 import { compare, valid } from "semver"
-import cache from "../appCache"
+import cache from "../cache"
 import { checkAlias } from "../utils/aliases"
 
 const { token, url } = cache.config
@@ -13,7 +13,7 @@ updateRouter.get("/:platform/:version", async (req, res) => {
   const { platform: platformName, version } = req.params
 
   if (!valid(version)) {
-    res.status(400).json({
+    res.status(400).send({
       error: "version_invalid",
       message: "The specified version is not SemVer-compatible",
     })
@@ -51,7 +51,7 @@ updateRouter.get("/:platform/:version", async (req, res) => {
   if (compare(latest.version, version) !== 0) {
     const { notes, pub_date } = latest
 
-    res.status(200).json({
+    res.status(200).send({
       name: latest.version,
       notes,
       pub_date,

@@ -1,4 +1,4 @@
-import { Cache } from "./utils/cache"
+import { ReleaseCache } from "./utils/releaseCache"
 
 const config = {
   account: process.env.ACCOUNT,
@@ -9,5 +9,5 @@ const config = {
   url: process.env.URL,
 }
 
-const cache = new Cache(config)
+const cache = new ReleaseCache(config)
 export default cache

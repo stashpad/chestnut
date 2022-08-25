@@ -1,4 +1,4 @@
-const { platformForFileName } = require("../src/utils/platform")
+const { platformForFileName } = require("../dist/utils/platform")
 
 describe("platform", () => {
   it("Filename is MyApp-1.0.0-arm64-mac.zip", () => {

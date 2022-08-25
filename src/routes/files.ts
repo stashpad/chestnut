@@ -1,5 +1,5 @@
 import express from "express"
-import cache from "../appCache"
+import cache from "../cache"
 import { proxyPrivateDownload } from "../utils/proxy"
 
 const { token, url } = cache.config
@@ -14,17 +14,23 @@ filesRouter.get("/:filename", async (req, res) => {
 
   // TODO: standardize json responses
   if (!latest.files) {
-    res.status(404).send("No files available")
+    res.status(404).send({
+      error: "no_file",
+      message: "No files available",
+    })
     return
   }
 
   if (!latest.files[filename]) {
-    res.status(404).send(`Can't load ${filename}`)
+    res.status(404).send({
+      error: "no_file",
+      message: `Can't load ${filename}`,
+    })
     return
   }
 
   if (shouldProxyPrivateDownload) {
-    proxyPrivateDownload(latest.files[filename], req, res)
+    proxyPrivateDownload(latest.files[filename], res, cache.config.token)
     return
   }
 

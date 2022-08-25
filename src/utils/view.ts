@@ -10,3 +10,5 @@ export default async () => {
 
   return compile(viewContent)
 }
+
+export const asJSON = (message: string) => ({ message })

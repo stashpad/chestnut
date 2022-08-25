@@ -1,4 +1,4 @@
-const logger = require("../src/utils/logger")
+const logger = require("../dist/utils/logger")
 
 describe("logger", () => {
   it("should throw if an error is logged", () => {
