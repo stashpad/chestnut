@@ -16,7 +16,15 @@ app.use("/download", downloadRouter)
 app.use("/update", updateRouter)
 app.use("/files", filesRouter)
 
-app.use((err: Error, _: express.Request, res: express.Response) => {
-  console.error(err.stack)
-  res.status(500).send("Something broke!")
-})
+app.use(
+  (
+    err: Error,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    console.log("res", res)
+    console.error(err.stack)
+    res.status(500).send("Something broke!")
+  }
+)

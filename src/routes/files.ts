@@ -12,8 +12,6 @@ filesRouter.get("/:filename", async (req, res) => {
   const { filename } = req.params
   const latest = await cache.loadCache()
 
-  console.log("latest", latest.files)
-
   // TODO: standardize json responses
   if (!latest.files) {
     res.status(404).send("No files available")
