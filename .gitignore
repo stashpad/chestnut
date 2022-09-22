@@ -2,4 +2,5 @@
 node_modules
 dist
 tmp
+coverage
 .DS_Store

@@ -1,21 +1,21 @@
-import express from "express"
-import { compare, valid } from "semver"
-import cache from "../cache"
-import { checkAlias } from "../utils/aliases"
+import express from 'express'
+import { compare, valid } from 'semver'
+import cache from '../cache'
+import { checkAlias } from '../utils/aliases'
 
 const { token, url } = cache.config
 const shouldProxyPrivateDownload =
-  token && typeof token === "string" && token.length > 0
+  token && typeof token === 'string' && token.length > 0
 
 export const updateRouter = express.Router()
 
-updateRouter.get("/:platform/:version", async (req, res) => {
+updateRouter.get('/:platform/:version', async (req, res) => {
   const { platform: platformName, version } = req.params
 
   if (!valid(version)) {
     res.status(400).send({
-      error: "version_invalid",
-      message: "The specified version is not SemVer-compatible",
+      error: 'version_invalid',
+      message: 'The specified version is not SemVer-compatible'
     })
     return
   }
@@ -24,8 +24,8 @@ updateRouter.get("/:platform/:version", async (req, res) => {
 
   if (!platform) {
     res.status(400).send({
-      error: "invalid_platform",
-      message: "The specified platform is not valid",
+      error: 'invalid_platform',
+      message: 'The specified platform is not valid'
     })
     return
   }
@@ -48,7 +48,7 @@ updateRouter.get("/:platform/:version", async (req, res) => {
   // that will take a long time to fix and release
   // a patch update.
 
-  if (compare(latest.version, version) !== 0) {
+  if (compare(latest.version ?? '', version) !== 0) {
     const { notes, pub_date } = latest
 
     res.status(200).send({
@@ -57,7 +57,7 @@ updateRouter.get("/:platform/:version", async (req, res) => {
       pub_date,
       url: shouldProxyPrivateDownload
         ? `${url}/download/${platformName}?update=true`
-        : latest.platforms[platform].url,
+        : latest.platforms[platform].url
     })
     return
   }

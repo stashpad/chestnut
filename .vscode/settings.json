@@ -1,8 +1,7 @@
 {
-  "javascript.validate.enable": false,
-  "javascript.format.enable": false,
-  "javascript.suggest.autoImports": true,
-  "javascript.preferences.importModuleSpecifier": "relative",
+  "typescript.format.enable": false,
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.codeActionsOnSave": {
     "source.organizeImports": true,
     "source.fixAll": true

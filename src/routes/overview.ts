@@ -1,12 +1,12 @@
-import { formatDistance, parseISO } from "date-fns"
-import express from "express"
-import cache from "../cache"
-import { logger } from "../utils/logger"
-import prepareView from "../utils/view"
+import { formatDistance, parseISO } from 'date-fns'
+import express from 'express'
+import cache from '../cache'
+import { logger } from '../utils/logger'
+import prepareView from '../utils/view'
 
 export const overviewRouter = express.Router()
 
-overviewRouter.get("/", async (req, res) => {
+overviewRouter.get('/', async (req, res) => {
   const latest = await cache.loadCache()
   const { config } = cache
 
@@ -15,11 +15,11 @@ overviewRouter.get("/", async (req, res) => {
 
     let date
     try {
-      date = formatDistance(parseISO(latest.pub_date), Date.now(), {
-        addSuffix: true,
+      date = formatDistance(parseISO(latest.pub_date ?? ''), Date.now(), {
+        addSuffix: true
       })
     } catch {
-      date = "Unknown"
+      date = 'Unknown'
     }
 
     const details = {
@@ -30,17 +30,17 @@ overviewRouter.get("/", async (req, res) => {
       version: latest.version,
       releaseNotes: `https://github.com/${config.account}/${config.repository}/releases/tag/${latest.version}`,
       allReleases: `https://github.com/${config.account}/${config.repository}/releases`,
-      github: `https://github.com/${config.account}/${config.repository}`,
+      github: `https://github.com/${config.account}/${config.repository}`
     }
 
     res.status(200).send(render(details))
   } catch (err) {
-    logger.error(err)
-    res.status(500).send("Error reading overview file")
+    logger.error(err as string)
+    res.status(500).send('Error reading overview file')
   }
 })
 
-overviewRouter.get("/health", async (req, res) => {
+overviewRouter.get('/health', async (req, res) => {
   // Get the latest version from the cache
   const latest = await cache.loadCache()
 

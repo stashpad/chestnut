@@ -1,4 +1,5 @@
-const { checkAlias } = require("../dist/utils/aliases")
+import { describe, expect, it } from "vitest"
+import { checkAlias } from "../src/utils/aliases"
 
 describe("aliases", () => {
   it("should accept platforms", () => {

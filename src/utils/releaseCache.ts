@@ -1,9 +1,9 @@
-import retry from "async-retry"
-import ms from "ms"
-import fetch from "node-fetch"
-import { platformForFileName } from "./aliases"
-import { logger } from "./logger"
-import { clearFilesFromDisk, downloadFileToDisk, toMB } from "./proxy"
+import retry from 'async-retry'
+import ms from 'ms'
+import fetch from 'node-fetch'
+import { platformForFileName } from './aliases'
+import { logger } from './logger'
+import { clearFilesFromDisk, downloadFileToDisk, toMB } from './proxy'
 
 export interface IConfig {
   account: string
@@ -58,7 +58,7 @@ export interface IFileMetadata {
 export class ReleaseCache {
   public config: IConfig
   private latest: ILatest
-  private lastUpdate: number //timestamp in ms
+  private lastUpdate: number | null //timestamp in ms
 
   /**
    * {
@@ -74,13 +74,13 @@ export class ReleaseCache {
 
     if (!account) {
       logger.error(
-        "ACCOUNT is not defined. Please define an ACCOUNT environment variable"
+        'ACCOUNT is not defined. Please define an ACCOUNT environment variable'
       )
     }
 
     if (!repository) {
       logger.error(
-        "REPOSITORY is not defined. Please define an REPOSITORY environment variable"
+        'REPOSITORY is not defined. Please define an REPOSITORY environment variable'
       )
     }
 
@@ -93,29 +93,28 @@ export class ReleaseCache {
 
   shouldProxyPrivateDownload = () => {
     const { token } = this.config
-    return token && typeof token === "string" && token.length > 0
+    return token && typeof token === 'string' && token.length > 0
   }
 
   refreshCache = async () => {
-    logger.info("Checking GitHub for latest release...")
+    logger.info('Checking GitHub for latest release...')
     const { account, repository, prerelease, token } = this.config
-    const repo = account + "/" + repository
+    const repo = account + '/' + repository
     const url = `https://api.github.com/repos/${repo}/releases?per_page=100`
-    const headers: HeadersInit = { Accept: "application/vnd.github.preview" }
+    const headers: HeadersInit = { Accept: 'application/vnd.github.preview' }
 
-    if (token && typeof token === "string" && token.length > 0) {
+    if (token && typeof token === 'string' && token.length > 0) {
       headers.Authorization = `token ${token}`
     }
 
     let response: Record<any, any> | null
 
     try {
-      let retries = process.env.NODE_ENV === "production" ? 3 : 0
+      let retries = process.env.NODE_ENV === 'production' ? 3 : 0
 
       response = await retry(
         async () => {
           const res = await fetch(url, { headers })
-
           if (res.status !== 200) {
             logger.error(
               `GitHub API responded with ${res.status} for url ${url}`
@@ -167,7 +166,7 @@ export class ReleaseCache {
     this.latest.files = {}
     this.latest.fullyDownloaded = false
     clearFilesFromDisk()
-    logger.info("Clearing cached data")
+    logger.info('Clearing cached data')
 
     logger.info(`Caching version ${tag_name}`)
 
@@ -184,7 +183,7 @@ export class ReleaseCache {
         api_url: url,
         url: browser_download_url,
         content_type,
-        size: toMB(size),
+        size: toMB(size)
       }
 
       const downloadProm = downloadFileToDisk(metadata, this.config.token)
@@ -228,12 +227,12 @@ export class ReleaseCache {
    * only once when the index file is parsed
    * @returns Cache object
    */
-  loadCache = async () => {
+  public loadCache = async () => {
     const { latest, refreshCache, isOutdated } = this
 
     if (!this.lastUpdate || isOutdated()) {
-      if (!this.lastUpdate) logger.info("No previous update available")
-      if (isOutdated()) logger.info("Passed refresh interval")
+      if (!this.lastUpdate) logger.info('No previous update available')
+      if (isOutdated()) logger.info('Passed refresh interval')
       await refreshCache()
     }
 
