@@ -68,7 +68,7 @@ export const downloadFileToDisk = async (
 
   const assetRes = await fetch(finalUrl, options)
   const filestream = fs.createWriteStream('./tmp/' + file.name)
-  return new Promise((res, rej) => {
+  return await new Promise((res, rej) => {
     assetRes.body?.pipe(filestream)
     assetRes.body?.on('error', rej)
     filestream.on('finish', res)

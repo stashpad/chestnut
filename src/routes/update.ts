@@ -13,11 +13,10 @@ updateRouter.get('/:platform/:version', async (req, res) => {
   const { platform: platformName, version } = req.params
 
   if (!valid(version)) {
-    res.status(400).send({
+    return res.status(400).send({
       error: 'version_invalid',
       message: 'The specified version is not SemVer-compatible'
     })
-    return
   }
 
   const platform = checkAlias(platformName)
@@ -33,7 +32,7 @@ updateRouter.get('/:platform/:version', async (req, res) => {
   // Get the latest version from the cache
   const latest = await cache.loadCache()
 
-  if (!latest.platforms || !latest.platforms[platform]) {
+  if (latest.platforms == null || !latest.platforms[platform]) {
     res.status(204).send()
     return
   }

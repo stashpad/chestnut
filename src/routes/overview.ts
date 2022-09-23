@@ -44,7 +44,7 @@ overviewRouter.get('/health', async (req, res) => {
   // Get the latest version from the cache
   const latest = await cache.loadCache()
 
-  if (!latest.platforms) {
+  if (latest.platforms == null) {
     res.status(404).send()
     return
   }

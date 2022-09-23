@@ -1,12 +1,12 @@
 import dotenv from 'dotenv'
 import express, { NextFunction, Request, Response } from 'express'
-dotenv.config()
 
 import helmet from 'helmet'
 import { downloadRouter } from './routes/download'
 import { filesRouter } from './routes/files'
 import { overviewRouter } from './routes/overview'
 import { updateRouter } from './routes/update'
+dotenv.config()
 
 export const app = express()
 app.use(helmet())

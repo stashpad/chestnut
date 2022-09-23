@@ -1,0 +1,43 @@
+name: Test
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛒 Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: 🧰 Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x
+          cache: yarn
+
+      - name: 🔎 Find yarn cache
+        id: yarn-cache-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: 🔐 Restore cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-
+
+      - name: 📦 Install dependencies
+        run: yarn install --ignore-platform --frozen-lockfile --network-timeout 300000
+
+      - name: 👕 Lint
+        run: yarn lint
+
+      - name: ✅ Type check
+        run: yarn type-check
+
+      - name: 🛠 Build
+        run: yarn build
+
+      - name: 📝 Tests
+        run: yarn test

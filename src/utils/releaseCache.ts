@@ -58,7 +58,7 @@ export interface IFileMetadata {
 export class ReleaseCache {
   public config: IConfig
   private latest: ILatest
-  private lastUpdate: number | null //timestamp in ms
+  private lastUpdate: number | null // timestamp in ms
 
   /**
    * {
@@ -69,7 +69,7 @@ export class ReleaseCache {
    * @param {*} config
    */
   constructor(config: IConfig) {
-    const { account, repository, token, interval, prerelease, url } = config
+    const { account, repository } = config
     this.config = config
 
     if (!account) {
@@ -110,7 +110,7 @@ export class ReleaseCache {
     let response: Record<any, any> | null
 
     try {
-      let retries = process.env.NODE_ENV === 'production' ? 3 : 0
+      const retries = process.env.NODE_ENV === 'production' ? 3 : 0
 
       response = await retry(
         async () => {
@@ -174,8 +174,8 @@ export class ReleaseCache {
     this.latest.notes = release.body
     this.latest.pub_date = release.published_at
 
-    const downloadPromises: Promise<any>[] = []
-    for (const asset of release.assets as IGithubAsset[]) {
+    const downloadPromises: Array<Promise<any>> = []
+    for (const asset of release.assets) {
       const { name, browser_download_url, url, content_type, size } = asset
 
       const metadata: IFileMetadata = {

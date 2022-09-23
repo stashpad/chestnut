@@ -13,7 +13,7 @@ filesRouter.get('/:filename', async (req, res) => {
   const { filename } = req.params
   const latest = await cache.loadCache()
 
-  if (!latest.files) {
+  if (latest.files == null) {
     res.status(404).send({
       error: 'no_file',
       message: 'No files available'

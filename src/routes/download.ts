@@ -15,7 +15,7 @@ const { token } = cache.config
 downloadRouter.get('/', async (req, res) => {
   const userAgent = parse(req.headers['user-agent'] ?? '')
   const params = parseQuery(req.query.toString())
-  const isUpdate = params && params.update
+  const isUpdate = params?.update
 
   let platform = ''
 
@@ -31,7 +31,7 @@ downloadRouter.get('/', async (req, res) => {
 
   const { platforms } = await cache.loadCache()
 
-  if (!platform || !platforms || !platforms[platform]) {
+  if (!platform || platforms == null || !platforms[platform]) {
     res.status(404).send({
       error: 'no_file',
       message: 'No download available for your platform'
@@ -53,7 +53,7 @@ downloadRouter.get('/', async (req, res) => {
 
 downloadRouter.get('/:platform', async (req, res) => {
   const queryParams = parseQuery(req.query.toString())
-  const isUpdate = queryParams && queryParams.update
+  const isUpdate = queryParams?.update
 
   let platform: string | false = req.params.platform
   if (platform === 'mac' && !isUpdate) {
@@ -78,7 +78,7 @@ downloadRouter.get('/:platform', async (req, res) => {
     return
   }
 
-  if (!latest.platforms || !latest.platforms[platform]) {
+  if (latest.platforms == null || !latest.platforms[platform]) {
     res.status(404).send({
       error: 'no_file',
       message: 'No download available for your platform'
