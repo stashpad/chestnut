@@ -2,12 +2,12 @@
 
 ![tests](https://github.com/stashpad/chestnut/actions/workflows/tests.yml/badge.svg?branch=main)
 
+> Chestnut is a lightweight server for deploying Electron apps. With the click of a button, you can deploy to [Render](https://render.com) to provide downloads and updates for your users.
+
 <p align="center">
   <a href="https://github.com/stashpad/chestnut/blob/master/LICENSE">License</a> ·
   <a href="https://github.com/stashpad/chestnut/blob/master/CONTRIBUTING.md">Contributing Guide</a>
 </p>
-
-> Chestnut is a lightweight server for deploying Electron apps. With the click of a button, you can deploy to [Render](https://render.com) to provide downloads and updates for your users.
 
 - Built with Express and Typescript
 - Caches release files & metadata from [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) on disk
