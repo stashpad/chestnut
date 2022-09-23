@@ -9,7 +9,7 @@
   <a href="https://github.com/stashpad/chestnut#contributing">Contributing</a>
 </p>
 
-- Built with Express and Typescript
+- Built with [Express](https://expressjs.com/) and Typescript
 - Caches release files & metadata from [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) on disk
 - Refreshes the cache every 10 minutes ([configurable](https://github.com/stashpad/chestnut#congfiguration))
 - Supports macOS, Windows, and Linux (using `.AppImage`)
@@ -84,7 +84,7 @@ autoUpdater.setFeedURL({ provider: 'generic', url: server })
 
 ### /
 
-Display an overview page showing the repository information as well as available platforms (and file sizes). Provides links to the repo, releases, currently cached version, and direct download links for each platform.
+Displays an overview page showing the repository information as well as available platforms (and file sizes). Provides links to the repo, releases, currently cached version, and direct download links for each platform.
 
 ### /download
 
@@ -103,7 +103,7 @@ darwin: ["mac", "macos", "osx"],
 exe: ["win32", "windows", "win"],
 deb: ["debian"],
 rpm: ["fedora"],
-AppImage: ["appimage"],
+AppImage: ["appimage", "linux"],
 dmg: ["dmg"],
 ```
 
@@ -126,6 +126,7 @@ Returns the files exactly as requested by the `electron-updater` lib. For exampl
 1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your machine
 2. `cd` into the directory of your clone: cd `chestnut`
 3. Run the development server: `yarn start`
+4. Open a [pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork) with your changes
 
 ## Credits
 
@@ -137,15 +138,8 @@ Here at Stashpad, we found that nothing quite fit our needs for deploying our de
 
 ## Todos
 
-- Create a safe cache busting mechanism so that you can force the server to reload all files in the case of making a release.
-- Create tests for all `ENV` variables
-- Create a GitHub Action workflow to run tests
-
-## Public facing
-
-- Define an API reference
-- Example with electron `autoUpdater`
-- Example with `electron-updater`
-- How to deploy on Render
-- How to deploy elsewhere (dockerfile?)
-- Comment on a few Hazel issues, other release servers
+- Create a cache busting mechanism to force the server to reload all files (in the case of making a release)
+- Create examples for both autoUpdater frameworks
+- Create an example with electron `autoUpdater`
+- Create an example with `electron-updater`
+- Explain how to deploy elsewhere (using a Dockerfile?)

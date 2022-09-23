@@ -1,18 +1,18 @@
-import colorLogger from "node-color-log"
+import colorLogger from 'node-color-log'
 
 const messageTypes = {
-  error: "[ERROR] ",
-  info: "[INFO]  ",
-  warn: "[WARN]  ",
+  error: '[ERROR] ',
+  info: '[INFO]  ',
+  warn: '[WARN]  '
 }
 
 const error = (message: string) => {
   const error = new Error(message)
   colorLogger
     .dim()
-    .log(new Date().toISOString() + " ")
+    .log(new Date().toISOString() + ' ')
     .joint()
-    .color("red")
+    .color('red')
     .bold()
     .log(messageTypes.error)
     .joint()
@@ -23,9 +23,9 @@ const error = (message: string) => {
 const info = (message: string) => {
   colorLogger
     .dim()
-    .log(new Date().toISOString() + " ")
+    .log(new Date().toISOString() + ' ')
     .joint()
-    .color("white")
+    .color('white')
     .bold()
     .log(messageTypes.info)
     .joint()
@@ -35,9 +35,9 @@ const info = (message: string) => {
 const warn = (message: string) => {
   colorLogger
     .dim()
-    .log(new Date().toISOString() + " ")
+    .log(new Date().toISOString() + ' ')
     .joint()
-    .color("yellow")
+    .color('yellow')
     .bold()
     .log(messageTypes.warn)
     .joint()

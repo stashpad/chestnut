@@ -1,6 +1,6 @@
 {
   "name": "chestnut",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "description": "Lightweight releases server for Electron designed to work with `electron-builder` and Electron's built-in `autoUpdater`",
   "main": "src/server.js",
   "authors": [
