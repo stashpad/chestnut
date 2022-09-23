@@ -2,7 +2,7 @@
 
 ![tests](https://github.com/stashpad/chestnut/actions/workflows/tests.yml/badge.svg?branch=main)
 
-> Chestnut is a lightweight server for deploying Electron apps. With the click of a button, you can deploy to [Render](https://render.com) to provide downloads and automatic updates for your users. Chestnut is an evolution of the popular [Hazel](https://github.com/vercel/hazel) server from [Vercel](https://vercel.com/).
+> Chestnut is a lightweight server for deploying Electron apps. With the click of a button, you can deploy to [Render](https://render.com) to provide downloads and automatic updates for your users. Chestnut is an evolution of the popular Electron release server [Hazel](https://github.com/vercel/hazel) server created by [Vercel](https://vercel.com/).
 
 <p align="center">
   <a href="https://github.com/stashpad/chestnut/blob/master/LICENSE">MIT License</a> ·
@@ -150,7 +150,7 @@ For GitHub releases stored in a private repo, this consumes a request on your Gi
 
 ## Credits
 
-Chestnut is an evolution of the popular [Hazel](https://github.com/vercel/hazel) server from [Vercel](https://vercel.com/). Much of the code was brought directly from Hazel. Thank you to the creators of Hazel for their previous work 💪.
+Chestnut is an evolution of the popular [Hazel](https://github.com/vercel/hazel) server from [Vercel](https://vercel.com/). Much of the code was brought directly from Hazel. Thank you to the [creators](https://github.com/leo) of Hazel for their previous work 💪. There was an excellent [comment](https://github.com/vercel/hazel/issues/63#issuecomment-903304150) on how to get Hazel working with `electron-updater`.
 
 The name Chestnut is inspired by the [Squirrel](https://github.com/Squirrel) updater used to update Electron apps on both the macOS and Windows platforms.
 
