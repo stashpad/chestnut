@@ -155,9 +155,3 @@ Chestnut is an evolution of the popular [Hazel](https://github.com/vercel/hazel)
 The name Chestnut is inspired by the [Squirrel](https://github.com/Squirrel) updater used to update Electron apps on both the macOS and Windows platforms.
 
 Here at Stashpad, we found that nothing quite fit our needs for deploying our Stashpad [desktop app](https://www.stashpad.com?utm_source=chestnut) - so we built Chestnut. We hope it can help you too!
-
-## Todos
-
-- Create a full boilerplate example with electron `autoUpdater`
-- Create a full boilerplate example with `electron-updater`
-- How to deploy elsewhere (using a Dockerfile?)
