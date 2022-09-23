@@ -9,9 +9,10 @@ export interface IConfig {
   account: string
   repository: string
   token?: string
-  interval?: string
+  interval?: number
   prerelease?: string
   url?: string
+  password?: string
 }
 export interface ILatest {
   pub_date?: string
@@ -87,7 +88,7 @@ export class ReleaseCache {
     this.latest = {}
     this.lastUpdate = null
 
-    // try to populate cache at startup
+    // populate cache at startup
     this.loadCache()
   }
 
@@ -96,7 +97,7 @@ export class ReleaseCache {
     return token && typeof token === 'string' && token.length > 0
   }
 
-  refreshCache = async () => {
+  refreshCache = async (force = false) => {
     logger.info('Checking GitHub for latest release...')
     const { account, repository, prerelease, token } = this.config
     const repo = account + '/' + repository
@@ -153,7 +154,7 @@ export class ReleaseCache {
 
     const { tag_name } = release
 
-    if (this.latest.version === tag_name) {
+    if (!force && this.latest.version === tag_name) {
       logger.info(
         `No updates - cached version ${this.latest.version} is the latest`
       )
@@ -212,7 +213,7 @@ export class ReleaseCache {
 
   isOutdated = () => {
     const { config } = this
-    const { interval = 10 } = config
+    const { interval } = config
 
     if (this.lastUpdate && Date.now() - this.lastUpdate > ms(`${interval}m`)) {
       return true

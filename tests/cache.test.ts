@@ -31,7 +31,6 @@ describe('cache', () => {
   it('should throw when account is not defined', () => {
     expect(() => {
       const config = { repository, account: '' }
-      console.log('fon', config)
       new ReleaseCache(config)
     }).toThrow(/ACCOUNT/)
   })

@@ -4,8 +4,9 @@ const config = {
   account: process.env.ACCOUNT!,
   repository: process.env.REPOSITORY!,
   token: process.env.TOKEN,
-  interval: process.env.INTERVAL,
+  interval: parseInt(process.env.INTERVAL ?? '10'),
   prerelease: process.env.PRERELEASE,
+  password: process.env.PASSWORD,
   url: process.env.URL
 }
 

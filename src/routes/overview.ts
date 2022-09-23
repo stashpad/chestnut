@@ -52,3 +52,21 @@ overviewRouter.get('/health', async (req, res) => {
   // send a 200 response if the release is found and cached
   res.status(200).send()
 })
+
+overviewRouter.get('/refresh/:password', async (req, res) => {
+  const token = req.params.password
+  if (!token || token !== cache.config.password) {
+    return res.status(200).send()
+  }
+
+  // Force update the release files
+  await cache.refreshCache(true)
+  const latest = await cache.loadCache()
+  if (latest.platforms == null) {
+    res.status(404).send()
+    return
+  }
+
+  // send a 200 response if the release is found and cached
+  res.status(200).send()
+})
