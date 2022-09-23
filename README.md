@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://github.com/stashpad/chestnut/blob/master/LICENSE">License</a> ·
-  <a href="https://github.com/stashpad/chestnut/blob/master/CONTRIBUTING.md">Contributing Guide</a>
+  <a href="https://github.com/stashpad/chestnut#contributing">Contributing</a>
 </p>
 
 - Built with Express and Typescript
