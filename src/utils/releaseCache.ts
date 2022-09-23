@@ -20,7 +20,6 @@ export interface ILatest {
   version?: string
   platforms?: Record<string, any>
   files?: Record<string, IFileMetadata>
-  fullyDownloaded?: boolean
 }
 
 export interface IGithubAsset {
@@ -165,9 +164,8 @@ export class ReleaseCache {
     // Clear list of download links
     this.latest.platforms = {}
     this.latest.files = {}
-    this.latest.fullyDownloaded = false
     clearFilesFromDisk()
-    logger.info('Clearing cached data')
+    logger.info('Cleaned cache')
 
     logger.info(`Caching version ${tag_name}`)
 
@@ -187,12 +185,15 @@ export class ReleaseCache {
         size: toMB(size)
       }
 
-      const downloadProm = downloadFileToDisk(metadata, this.config.token)
-      downloadProm.then(() => {
-        metadata.cached = true
-        logger.info(`${name} is cached`)
-      })
-      downloadPromises.push(downloadProm)
+      if (token) {
+        const downloadProm = downloadFileToDisk(metadata, this.config.token)
+        downloadProm.then(() => {
+          metadata.cached = true
+          logger.info(`${name} is cached`)
+        })
+        downloadPromises.push(downloadProm)
+      }
+
       this.latest.files[name] = metadata
 
       const platform = platformForFileName(name)
@@ -203,10 +204,11 @@ export class ReleaseCache {
       this.latest.platforms[platform] = metadata
     }
 
-    Promise.all(downloadPromises).then(() => {
-      this.latest.fullyDownloaded = true
-      logger.info(`✅ Finished downloading ${downloadPromises.length} files`)
-    })
+    if (token) {
+      Promise.all(downloadPromises).then(() => {
+        logger.info(`✅ Finished downloading ${downloadPromises.length} files`)
+      })
+    }
 
     this.lastUpdate = Date.now()
   }
