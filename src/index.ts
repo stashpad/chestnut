@@ -1,12 +1,14 @@
+/* eslint-disable import/first */
 import dotenv from 'dotenv'
-import express, { NextFunction, Request, Response } from 'express'
+dotenv.config()
 
+import express, { NextFunction, Request, Response } from 'express'
 import helmet from 'helmet'
 import { downloadRouter } from './routes/download'
 import { filesRouter } from './routes/files'
 import { overviewRouter } from './routes/overview'
 import { updateRouter } from './routes/update'
-dotenv.config()
+import { logger } from './utils/logger'
 
 export const app = express()
 app.use(helmet())
@@ -22,3 +24,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     .status(500)
     .send({ error: 'internal_error', message: 'Internal server error' })
 })
+
+const port = process.env.PORT ?? 3000
+
+app.listen(port, () => logger.info(`Chestnut listening on port ${port}`))
