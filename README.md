@@ -70,7 +70,7 @@ For private repos:
 
 ## Usage with Electron's `autoUpdater`
 
-An example of how to use Chestnut with Electron's built in `autoUpdater`.
+An example of how to use Chestnut with Electron's built in [`autoUpdater`](https://www.electronjs.org/docs/latest/api/auto-updater).
 
 ```ts
 const { app, autoUpdater } = require('electron')
@@ -83,7 +83,7 @@ autoUpdater.setFeedURL({ url })
 
 ## Usage with `electron-updater`
 
-An example of how to use Chestnut with `electron-updater`'s `autoUpdater`, provided by the `electron-builder` library. It consumes the files from the GitHub Release, checking the `latest.yml` family of files to know when an update is available.
+An example of how to use Chestnut with [`electron-updater`](https://www.electron.build/auto-update.html)'s `autoUpdater`, provided by the `electron-builder` library. It consumes the files from the GitHub Release, checking the `latest.yml` family of files to know when an update is available.
 
 ```ts
 const { autoUpdater } = require('electron-updater')
