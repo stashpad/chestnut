@@ -1,6 +1,6 @@
 # Chestnut 🌳
 
-![tests](https://github.com/stashpad/chestnut/actions/workflows/test.yml/badge.svg)
+![tests](https://github.com/stashpad/chestnut/actions/workflows/tests.yml/badge.svg)
 
 <p align="center">
   <a href="https://github.com/stashpad/chestnut/blob/master/LICENSE">License</a> ·
