@@ -11,7 +11,7 @@
 
 - Built with [Express](https://expressjs.com/) and Typescript.
 - Caches release files (for private repos) & metadata from [GitHub Releases](https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository) on disk.
-- Refreshes the cache every 10 minutes ([configurable](https://github.com/stashpad/chestnut#configuration)).
+- Refreshes the cache every 10 minutes ([configurable](https://github.com/stashpad/chestnut#configuration-%EF%B8%8F)).
 - Supports macOS, Windows, and Linux (via `.AppImage`).
 - Works with Electron's built in `autoUpdater`, or `electron-updater`'s version (provided by `electron-builder`).
 - Supports both public and private GitHub repos.
@@ -25,7 +25,7 @@
 
 ## Usage 📦
 
-You can easily deploy Chestnut to [Render](https://render.com) with a single click. Don't forget to [configure](https://github.com/stashpad/chestnut#configuration) your [ENV variables](https://render.com/docs/environment-variables) on Render.
+You can easily deploy Chestnut to [Render](https://render.com) with a single click. Don't forget to [configure](https://github.com/stashpad/chestnut#configuration-%EF%B8%8F) your [ENV variables](https://render.com/docs/environment-variables) on Render.
 
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/stashpad/chestnut/tree/main)
 
