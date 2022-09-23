@@ -1,0 +1,21 @@
+services:
+  - name: chestnut
+    type: web
+    env: node
+    region: ohio
+    buildCommand: yarn && yarn build
+    startCommand: yarn production
+    healthCheckPath: /health
+    envVars:
+      - key: ACCOUNT
+        sync: false
+      - key: REPOSITORY
+        sync: false
+      - key: PORT
+        sync: false
+      - key: TOKEN
+        sync: false
+      - key: URL
+        sync: false
+      - key: PASSWORD
+        sync: false
