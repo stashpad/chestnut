@@ -65,7 +65,7 @@ Optional:
 For private repos:
 
 - `TOKEN`: Your GitHub token with the `repo` scope
-- `PASSWORD`: Used to bust the file cache and force a reload of the latest release. Please choose a secure password since busting the cache will use up your GitHub Token's request limit.
+- `PASSWORD`: Used to bust the file cache and force a reload of the latest release. Please choose a secure password since busting the cache will use your GitHub Token's request limit.
 - `URL`: The server's URL
 
 ## Usage with Electron's `autoUpdater`
