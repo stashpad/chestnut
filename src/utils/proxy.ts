@@ -67,11 +67,17 @@ export const downloadFileToDisk = async (
   }
 
   const assetRes = await fetch(finalUrl, options)
-  const filestream = fs.createWriteStream('./tmp/' + file.name)
-  return await new Promise((res, rej) => {
-    assetRes.body?.pipe(filestream)
-    assetRes.body?.on('error', rej)
-    filestream.on('finish', res)
+  return await new Promise<void>((res, rej) => {
+    const ret = assetRes.body?.pipe(fs.createWriteStream('./tmp/' + file.name))
+    ret
+      .on('error', (err) => {
+        logger.error(`Error from pipe: ${err.message}`)
+        rej(err)
+      })
+      .on('close', () => {
+        logger.info(`Filestream closed for: ${file.name}`)
+        res()
+      })
   })
 }
 
