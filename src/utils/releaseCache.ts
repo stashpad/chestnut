@@ -101,10 +101,7 @@ export class ReleaseCache {
     const { account, repository, prerelease, token } = this.config
     const repo = account + '/' + repository
     const url = `https://api.github.com/repos/${repo}/releases?per_page=100`
-    const headers: HeadersInit = {
-      Accept: 'application/vnd.github.preview',
-      'User-Agent': 'Stashpad'
-    }
+    const headers: HeadersInit = { Accept: 'application/vnd.github.preview' }
 
     if (token && typeof token === 'string' && token.length > 0) {
       headers.Authorization = `token ${token}`
@@ -119,11 +116,6 @@ export class ReleaseCache {
         async () => {
           const res = await fetch(url, { headers })
           if (res.status !== 200) {
-            try {
-              console.error(await res.json())
-            } catch (err) {
-              console.error(err)
-            }
             logger.error(
               `GitHub API responded with ${res.status} for url ${url}`
             )
