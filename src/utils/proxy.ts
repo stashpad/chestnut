@@ -5,8 +5,10 @@ import { logger } from './logger'
 import { IFileMetadata } from './releaseCache'
 
 export const shouldProxyPrivateDownload = (
-  token: string | undefined
-): token is string => !!(token && typeof token === 'string' && token.length > 0)
+  token: string | undefined,
+  serveCache: boolean | undefined
+): token is string =>
+  !!serveCache && !!(token && typeof token === 'string' && token.length > 0)
 
 export const proxyPrivateDownload = (
   file: IFileMetadata,
@@ -23,8 +25,7 @@ export const proxyPrivateDownload = (
   if (cached && fs.existsSync('./tmp/' + name)) {
     res.set('Content-Type', content_type)
     res.set('Content-Disposition', `attachment; filename=${name}`)
-    const buffer = getFileFromDisk(file)
-    res.end(buffer)
+    fs.createReadStream('./tmp/' + file.name).pipe(res)
     return
   }
 
@@ -79,10 +80,6 @@ export const downloadFileToDisk = async (
         res()
       })
   })
-}
-
-const getFileFromDisk = (file: IFileMetadata) => {
-  return fs.readFileSync('./tmp/' + file.name)
 }
 
 export const clearFilesFromDisk = () => {

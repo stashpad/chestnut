@@ -5,7 +5,7 @@ import {
   shouldProxyPrivateDownload
 } from '../utils/proxy'
 
-const { token } = cache.config
+const { token, serveCache } = cache.config
 
 export const filesRouter = express.Router()
 
@@ -29,7 +29,7 @@ filesRouter.get('/:filename', async (req, res) => {
     return
   }
 
-  if (shouldProxyPrivateDownload(token)) {
+  if (shouldProxyPrivateDownload(token, serveCache)) {
     proxyPrivateDownload(latest.files[filename], res, token)
     return
   }

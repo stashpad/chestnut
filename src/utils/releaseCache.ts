@@ -3,7 +3,12 @@ import ms from 'ms'
 import fetch from 'node-fetch'
 import { platformForFileName } from './aliases'
 import { logger } from './logger'
-import { clearFilesFromDisk, downloadFileToDisk, toMB } from './proxy'
+import {
+  clearFilesFromDisk,
+  downloadFileToDisk,
+  shouldProxyPrivateDownload,
+  toMB
+} from './proxy'
 
 export interface IConfig {
   account: string
@@ -13,6 +18,7 @@ export interface IConfig {
   prerelease?: string
   url?: string
   password?: string
+  serveCache?: boolean
 }
 export interface ILatest {
   pub_date?: string
@@ -87,23 +93,25 @@ export class ReleaseCache {
     this.latest = {}
     this.lastUpdate = null
 
-    // populate cache at startup
     this.loadCache()
   }
 
-  shouldProxyPrivateDownload = () => {
+  getToken = () => {
     const { token } = this.config
     return token && typeof token === 'string' && token.length > 0
   }
 
   refreshCache = async (force = false) => {
     logger.info('Checking GitHub for latest release...')
-    const { account, repository, prerelease, token } = this.config
+    const { account, repository, prerelease, token, serveCache } = this.config
     const repo = account + '/' + repository
     const url = `https://api.github.com/repos/${repo}/releases?per_page=100`
-    const headers: HeadersInit = { Accept: 'application/vnd.github.preview' }
+    const headers: HeadersInit = {
+      Accept: 'application/vnd.github.preview',
+      'User-Agent': `${repo} update server`
+    }
 
-    if (token && typeof token === 'string' && token.length > 0) {
+    if (this.getToken()) {
       headers.Authorization = `token ${token}`
     }
 
@@ -114,6 +122,9 @@ export class ReleaseCache {
 
       response = await retry(
         async () => {
+          if (this.getToken())
+            logger.warn('Calling github API using token. Affects rate limit.')
+
           const res = await fetch(url, { headers })
           if (res.status !== 200) {
             logger.error(
@@ -185,13 +196,13 @@ export class ReleaseCache {
         size: toMB(size)
       }
 
-      if (token) {
-        const downloadProm = downloadFileToDisk(metadata, this.config.token)
-        downloadProm.then(() => {
+      if (shouldProxyPrivateDownload(token, serveCache)) {
+        const downloadPromise = downloadFileToDisk(metadata, token)
+        downloadPromise.then(() => {
           metadata.cached = true
           logger.info(`${name} is cached`)
         })
-        downloadPromises.push(downloadProm)
+        downloadPromises.push(downloadPromise)
       }
 
       this.latest.files[name] = metadata
@@ -204,7 +215,7 @@ export class ReleaseCache {
       this.latest.platforms[platform] = metadata
     }
 
-    if (token) {
+    if (shouldProxyPrivateDownload(token, serveCache)) {
       Promise.all(downloadPromises).then(() => {
         logger.info(`✅ Finished downloading ${downloadPromises.length} files`)
       })

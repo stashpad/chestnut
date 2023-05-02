@@ -10,7 +10,7 @@ import {
 
 export const downloadRouter = express.Router()
 
-const { token } = cache.config
+const { token, serveCache } = cache.config
 
 downloadRouter.get('/', async (req, res) => {
   const userAgent = parse(req.headers['user-agent'] ?? '')
@@ -39,7 +39,7 @@ downloadRouter.get('/', async (req, res) => {
     return
   }
 
-  if (shouldProxyPrivateDownload(token)) {
+  if (shouldProxyPrivateDownload(token, serveCache)) {
     proxyPrivateDownload(platforms[platform], res, token)
     return
   }
@@ -86,7 +86,7 @@ downloadRouter.get('/:platform', async (req, res) => {
     return
   }
 
-  if (shouldProxyPrivateDownload(token)) {
+  if (shouldProxyPrivateDownload(token, serveCache)) {
     proxyPrivateDownload(latest.platforms[platform], res, token)
     return
   }

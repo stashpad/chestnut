@@ -28,12 +28,14 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 const port = process.env.PORT ?? 3000
 
-logger.info(`Using setting: ACCOUNT: ${config.account}`)
-logger.info(`Using setting: REPOSITORY: ${config.repository}`)
-logger.info(`Using setting: URL: ${config.url}`)
-logger.info(`Using setting: TOKEN: ${config.token}`)
-logger.info(`Using setting: PRERELEASE: ${config.prerelease}`)
-logger.info(`Using setting: URL: ${config.url}`)
-logger.info(`Using setting: INTERVAL: ${config.interval}`)
+logger.info(`Using settings`)
+logger.info(`\tACCOUNT: ${config.account}`)
+logger.info(`\tREPOSITORY: ${config.repository}`)
+logger.info(`\tURL: ${config.url}`)
+logger.info(`\tTOKEN: ${config.token}`)
+logger.info(`\tSERVE_CACHE: ${config.serveCache}`)
+logger.info(`\tPRERELEASE: ${config.prerelease}`)
+logger.info(`\tURL: ${config.url}`)
+logger.info(`\tINTERVAL: ${config.interval}`)
 
 app.listen(port, () => logger.info(`Chestnut listening on port ${port}`))
