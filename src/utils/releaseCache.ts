@@ -122,9 +122,6 @@ export class ReleaseCache {
 
       response = await retry(
         async () => {
-          if (this.getToken())
-            logger.warn('Calling github API using token. Affects rate limit.')
-
           const res = await fetch(url, { headers })
           if (res.status !== 200) {
             logger.error(

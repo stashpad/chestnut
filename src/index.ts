@@ -15,6 +15,7 @@ export const app = express()
 app.use(helmet())
 
 app.use('/', overviewRouter)
+app.use(express.static('public'))
 app.use('/download', downloadRouter)
 app.use('/update', updateRouter)
 app.use('/files', filesRouter)
