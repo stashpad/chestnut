@@ -61,11 +61,14 @@ Optional:
 
 - `PORT`: The port that Chestnut should use (defaults to `3000`)
 - `INTERVAL`: Refreshes the cache every `INTERVAL` minutes (defaults to `10`)
+- `SERVE_CACHE`: Whether to cache and serve files from disk (`true`) or redirect to GitHub releases (defaults to `false`)
 
 For private repos:
 
+_Note: You should set the SERVE_CACHE flag to true, or your rate limit will quickly get used up._
+
 - `TOKEN`: Your GitHub token with the `repo` scope
-- `PASSWORD`: Used to bust the file cache and force a reload of the latest release. Please choose a secure password since busting the cache will use your GitHub Token's request limit.
+- `PASSWORD`: Used to bust the file cache and force a reload of the latest release. Please choose a secure password since busting the cache will count towards your GitHub Token's request limit.
 - `URL`: The server's URL
 
 ## Usage with Electron's `autoUpdater`
